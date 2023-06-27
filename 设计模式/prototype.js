@@ -4,30 +4,31 @@
  */
 
 class EnemyPlane {
-  constructor(x = 0) {
-    this.x = x
-  }
-  fly() {
-    console.log('flying')
-  }
+	constructor(x = 0) {
+		this.x = x
+	}
+	fly() {
+		console.log('flying')
+	}
 }
 
 function deep(obj) {
-  return Object.assign({}, obj)
+	return Object.assign({}, obj)
 }
 
 class EnemyPlaneFactory {
-  static getEnemyPlane() {
-    if (!this.instance) this.instance = new EnemyPlane()
-    // 原型链拷贝
-    return this.instance
-  }
+	static getEnemyPlane() {
+		// 单例模式
+		if (!this.instance) this.instance = new EnemyPlane()
+		// 原型链拷贝
+		return this.instance
+	}
 }
 
 console.log(EnemyPlaneFactory)
 console.time()
-for(let i = 0; i < 10; i++) {
-  const ep = new EnemyPlane()
-  // const ep = EnemyPlaneFactory.getEnemyPlane()
+for (let i = 0; i < 10; i++) {
+	const ep = new EnemyPlane()
+	// const ep = EnemyPlaneFactory.getEnemyPlane()
 }
 console.timeEnd()
