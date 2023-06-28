@@ -27,6 +27,8 @@ class IntermediateCar extends Car {
   }
 }
 
+
+
 class HighCar extends Car {
   constructor(name) {
     super(name)
