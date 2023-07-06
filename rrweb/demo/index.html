@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Page Title</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+</head>
+
+<body class="main">
+  <div id="mainId">
+    <button id="add" onclick="handAdd()"> 添加 </button>
+  </div>
+
+
+  <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script>
+  <script>
+    // let stopFn = rrweb.record({
+    //   emit(event) {
+    //     console.log('event===', event)
+    //     // if (events.length > 100) {
+    //     //   // stop after 100 events
+
+    //     // }
+    //   },
+    // });
+    
+  </script>
+
+  <script>
+    const infoDom = document.getElementById('mainId')
+
+    function handAdd() {
+      const divDom = document.createElement('div')
+      divDom.innerHTML = `新增节点${Math.random()}`
+      infoDom.appendChild(divDom)
+    }
+
+    console.log('infoDom====', infoDom);
+
+
+    const config = { attributes: true, childList: true, subtree: true };
+
+    const mutObserver = new MutationObserver((mutationList, observer) => {
+      console.log(mutationList, observer)
+    });
+
+    mutObserver.observe(infoDom, config)
+
+  </script>
+
+</body>
+
+</html>
