@@ -27,22 +27,68 @@
     //     // }
     //   },
     // });
-    
+
+    const events = []
+
+    // Array.prototype.push = function() {
+    //   this[this.length] = arguments[0];
+    //   console.log(this)
+    // }
+    function getWindowHeight() {
+      return window.innerHeight || document.documentElement && document.documentElement.clientHeight || document.body && document.body.clientHeight;
+    }
+    function getWindowWidth() {
+      return window.innerWidth || document.documentElement && document.documentElement.clientWidth || document.body && document.body.clientWidth;
+    }
+
+    function deepCopy(data) {
+      return JSON.parse(JSON.stringify(data))
+    }
+
   </script>
 
   <script>
-    const infoDom = document.getElementById('mainId')
+
+
+  </script>
+
+  <script>
+
+    document.addEventListener('readystatechange', () => {
+      console.log('document.readyState===', document.readyState)
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        events.push({
+          type: 2,
+          data: {
+            href: window.location.href,
+            width: getWindowWidth(),
+            height: getWindowHeight(),
+          }
+        })
+      }
+      console.log('events===', deepCopy(events))
+    });
+
+  </script>
+
+  <noscript>
+    const infoDom = document.documentElement
 
     function handAdd() {
       const divDom = document.createElement('div')
       divDom.innerHTML = `新增节点${Math.random()}`
-      infoDom.appendChild(divDom)
+      document.getElementById('mainId').appendChild(divDom)
     }
 
     console.log('infoDom====', infoDom);
 
-
-    const config = { attributes: true, childList: true, subtree: true };
+    const config = {
+      childList: true,
+      subtree: true,
+      attribute: true,
+      characterData: true,
+      attributeFilter: ['class', 'style']
+    };
 
     const mutObserver = new MutationObserver((mutationList, observer) => {
       console.log(mutationList, observer)
@@ -50,7 +96,7 @@
 
     mutObserver.observe(infoDom, config)
 
-  </script>
+  </noscript>
 
 </body>
 
