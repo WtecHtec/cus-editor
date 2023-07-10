@@ -2,178 +2,186 @@
 <html>
 
 <head>
-  <meta charset='utf-8'>
-  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>Page Title</title>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
-  <style>
-    .main {
-      color: #000;
-    }
-  </style>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Page Title</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
+	<script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+	<style>
+		.main {
+			color: #000;
+		}
+	</style>
 </head>
 
-<body class="main main2" data-item = "main-text">
-  <div id="mainId">
-    <button id="add" onclick="handAdd()"> 添加 </button>
-  </div>
+<body class="main main2" data-item="main-text">
+	<div id="mainId">
+		设置
+		<button id="add" onclick="handAdd()"> 添加 </button>
+	</div>
 
-  <img src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
+	<img src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
 
-  <!-- <iframe src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"></iframe> -->
+	<!-- <iframe src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"></iframe> -->
 
-  <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script>
-  <script>
-    // let stopFn = rrweb.record({
-    //   emit(event) {
-    //     console.log('event===', event)
-    //     // if (events.length > 100) {
-    //     //   // stop after 100 events
+	<script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script>
+	<script>
+		// let stopFn = rrweb.record({
+		//   emit(event) {
+		//     console.log('event===', event)
+		//     // if (events.length > 100) {
+		//     //   // stop after 100 events
 
-    //     // }
-    //   },
-    // });
+		//     // }
+		//   },
+		// });
 
-    const events = []
+		const events = []
 
-    let iframeDom = null
+		let iframeDom = null
 
-    // Array.prototype.push = function() {
-    //   this[this.length] = arguments[0];
-    //   console.log(this)
-    // }
-    function getWindowHeight() {
-      return window.innerHeight || document.documentElement && document.documentElement.clientHeight || document.body && document.body.clientHeight;
-    }
-    function getWindowWidth() {
-      return window.innerWidth || document.documentElement && document.documentElement.clientWidth || document.body && document.body.clientWidth;
-    }
+		// Array.prototype.push = function() {
+		//   this[this.length] = arguments[0];
+		//   console.log(this)
+		// }
+		function getWindowHeight() {
+			return window.innerHeight || document.documentElement && document.documentElement.clientHeight || document.body && document.body.clientHeight;
+		}
+		function getWindowWidth() {
+			return window.innerWidth || document.documentElement && document.documentElement.clientWidth || document.body && document.body.clientWidth;
+		}
 
-    function deepCopy(data) {
-      return JSON.parse(JSON.stringify(data))
-    }
-
-  </script>
-
-  <script>
-    console.log(document.childNodes[1])
+		function deepCopy(data) {
+			return JSON.parse(JSON.stringify(data))
+		}
 
 
-    function downLoadLink(linkUrl) {
-      iframeDom = iframeDom || document.createElement('iframe')
-      iframeDom.src = linkUrl
-      iframeDom.id = 'test_iframeDom'
+		// function reqListener() {
+		// 	console.log(this.responseText);
+		// }
 
-      const msgScript = document.createComment('script')
-      iframeDom.appendChild(msgScript)
-      iframeDom.onload = (e) => {
-        // console.log('iframe=====',  iframeDom.contentWindow.window.document)
-        var myIframe = document.getElementById("test_iframeDom").contentWindow
-                               .document.getElementById("son").innerText;
-        console.log(myIframe)   
-      }
-      iframeDom && document.body.appendChild(iframeDom)
-    }
-    // DomTree 转换
-    function parseDom(dom) {
-      const root = []
-      function parse(dom) {
-        if (!dom) return ''
-        const node = {
-          tagName: dom.tagName || '',
-          txtContext: dom.textContent || '',
-          attributes: {},
-          childNodes: [],
-        }
-        // 属性
-        const attributes = dom.attributes
-        if (attributes && typeof attributes === 'object' && Object.keys(attributes)) {
-          Object.keys(attributes).forEach(key => {
-            node.attributes[attributes[key].nodeName] = attributes[key].value
-          })
-        }
+		// let oReq = new XMLHttpRequest();
+		// oReq.addEventListener("load", reqListener);
+		// oReq.open("GET", "https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web//static/bytedesign.min.css");
+		// oReq.send();
+	</script>
 
-        // 针对 script, 直接失效
+	<script>
+		console.log(document.childNodes[1])
 
-        if (node.tagName === 'SCRIPT') {
-          node.tagName = 'NOSCRIPT'
-        }
 
-        
-        // 针对 style
-        
+		function downLoadLink(linkUrl) {
+			iframeDom = iframeDom || document.createElement('iframe')
+			iframeDom.src = linkUrl
+			iframeDom.id = 'test_iframeDom'
 
-        // 针对link
-       
-        if (node.tagName === 'LINK' && node.attributes.rel === 'stylesheet') {
-          console.log('dom.href====', node, dom.href)
-          downLoadLink(dom.href)
-        }
+			const msgScript = document.createComment('script')
+			iframeDom.appendChild(msgScript)
+			iframeDom.onload = (e) => {
+				// console.log('iframe=====',  iframeDom.contentWindow.window.document)
+				var myIframe = document.getElementById("test_iframeDom").contentWindow
+					.document.getElementById("son").innerText;
+				console.log(myIframe)
+			}
+			iframeDom && document.body.appendChild(iframeDom)
+		}
+		// DomTree 转换
+		function parseDom(dom) {
+			function parse(dom) {
+				if (!dom) return ''
+				const node = {
+					tagName: dom.nodeName || '',
+					txtContext: dom.nodeName === '#text' ? dom.textContent || '' : '',
+					attributes: {},
+					childNodes: [],
+				}
+				// 属性
+				const attributes = dom.attributes
+				if (attributes && typeof attributes === 'object' && Object.keys(attributes)) {
+					Object.keys(attributes).forEach(key => {
+						node.attributes[attributes[key].nodeName] = attributes[key].value
+					})
+				}
+				// 针对
 
-        // 子节点数组
-        const childNodes = dom.children
-        if (childNodes && childNodes.length) {
-          for (let i = 0; i < childNodes.length; i++) {
-            node.childNodes.push(parse(childNodes[i]))
-          }
-        } 
-        return node;
-      }
+				// 针对 script, 直接失效
 
-      parse(dom)
-    }
+				if (node.tagName === 'SCRIPT') {
+					node.tagName = 'NOSCRIPT'
+				}
 
-  </script>
 
-  <script>
+				// 针对 style
+				// 针对link
+				// if (node.tagName === 'LINK' && node.attributes.rel === 'stylesheet') {
+				// 	console.log('dom.href====', node, dom.href)
+				// 	downLoadLink(dom.href)
+				// }
 
-    document.addEventListener('readystatechange', () => {
-      console.log('document.readyState===', document.readyState)
-      if (document.readyState === 'interactive' || document.readyState === 'complete') {
-        events.push({
-          type: 2,
-          data: {
-            href: window.location.href,
-            width: getWindowWidth(),
-            height: getWindowHeight(),
-          }
-        })
-        parseDom(document.children[0])
-      }
-      console.log('events===', deepCopy(events))
-    });
-    
+				// 子节点数组
+				const childNodes = dom.childNodes
+				if (childNodes && childNodes.length) {
+					for (let i = 0; i < childNodes.length; i++) {
+						node.childNodes.push(parse(childNodes[i]))
+					}
+				}
+				return node;
+			}
+			const nodes = parse(dom)
+			return [nodes];
+		}
 
-  </script>
+	</script>
 
-  <noscript>
-    const infoDom = document.documentElement
+	<script>
 
-    function handAdd() {
-      const divDom = document.createElement('div')
-      divDom.innerHTML = `新增节点${Math.random()}`
-      document.getElementById('mainId').appendChild(divDom)
-    }
+		document.addEventListener('readystatechange', () => {
+			console.log('document.readyState===', document.readyState)
+			if (document.readyState === 'interactive' || document.readyState === 'complete') {
+				events.push({
+					type: 2,
+					data: {
+						href: window.location.href,
+						width: getWindowWidth(),
+						height: getWindowHeight(),
+					}
+				})
+				const root = parseDom(document.childNodes[1])
+				console.log(root)
+			}
+			console.log('events===', deepCopy(events))
+		});
 
-    console.log('infoDom====', infoDom);
 
-    const config = {
-      childList: true,
-      subtree: true,
-      attribute: true,
-      characterData: true,
-      attributeFilter: ['class', 'style']
-    };
+	</script>
 
-    const mutObserver = new MutationObserver((mutationList, observer) => {
-      console.log(mutationList, observer)
-    });
+	<noscript>
+		const infoDom = document.documentElement
 
-    mutObserver.observe(infoDom, config)
+		function handAdd() {
+		const divDom = document.createElement('div')
+		divDom.innerHTML = `新增节点${Math.random()}`
+		document.getElementById('mainId').appendChild(divDom)
+		}
 
-  </noscript>
+		console.log('infoDom====', infoDom);
+
+		const config = {
+		childList: true,
+		subtree: true,
+		attribute: true,
+		characterData: true,
+		attributeFilter: ['class', 'style']
+		};
+
+		const mutObserver = new MutationObserver((mutationList, observer) => {
+		console.log(mutationList, observer)
+		});
+
+		mutObserver.observe(infoDom, config)
+
+	</noscript>
 
 </body>
 
