@@ -56,6 +56,13 @@
 			return JSON.parse(JSON.stringify(data))
 		}
 
+    function getStyleByDisplay(dom) {
+      try {
+        return getComputedStyle(dom).display
+      } catch (e) {
+        return ''
+      }
+    }
 
 		// function reqListener() {
 		// 	console.log(this.responseText);
@@ -69,6 +76,14 @@
 
 	<script>
 		console.log(document.childNodes[1])
+
+  //  getComputedStyle(document.getElementById('wtechtec_opt'))
+
+  setTimeout(() => {
+    let test = document.getElementById("wtechtec_opt")
+console.log('setTimeout===')
+console.log(test.style);
+  }, 100)
 
 
 		function downLoadLink(linkUrl) {
@@ -94,26 +109,28 @@
 					tagName: dom.nodeName || '',
 					txtContext: dom.nodeName === '#text' ? dom.textContent || '' : '',
 					attributes: {},
+          style: {},
 					childNodes: [],
 				}
-				// 属性
+				// 属性style、id、data-*
 				const attributes = dom.attributes
 				if (attributes && typeof attributes === 'object' && Object.keys(attributes)) {
 					Object.keys(attributes).forEach(key => {
 						node.attributes[attributes[key].nodeName] = attributes[key].value
 					})
 				}
-				// 针对
+
+				// 针对 display 
+        if (getStyleByDisplay(dom) === 'none' ) {
+          node.style.display = 'none'
+        }
 
 				// 针对 script, 直接失效
-
 				if (node.tagName === 'SCRIPT') {
 					node.tagName = 'NOSCRIPT'
 				}
 
-
-				// 针对 style
-				// 针对link
+				// 针对link, 直接引用链接
 				// if (node.tagName === 'LINK' && node.attributes.rel === 'stylesheet') {
 				// 	console.log('dom.href====', node, dom.href)
 				// 	downLoadLink(dom.href)
