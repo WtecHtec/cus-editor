@@ -2,59 +2,64 @@
 <html>
 
 <head>
-	<meta charset='utf-8'>
-	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
-	<title>Page Title</title>
-	<meta name='viewport' content='width=device-width, initial-scale=1'>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
-	<script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
-	<style>
-		.main {
-			color: #000;
-		}
-	</style>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Page Title</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+  <style>
+    .main {
+      color: #000;
+    }
+    #mainId {
+      color: red;
+    }
+  </style>
 </head>
 
 <body class="main main2" data-item="main-text">
-	<div id="mainId">
-		设置
-		<button id="add" onclick="handAdd()"> 添加 </button>
-	</div>
+  <div id="mainId">
+    设置
+    <button id="add" onclick="handAdd()"> 添加 </button>
+  </div>
 
-	<img src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
+  <img src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
 
-	<!-- <iframe src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"></iframe> -->
+  <!-- <iframe src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"></iframe> -->
 
-	<script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script>
-	<script>
-		// let stopFn = rrweb.record({
-		//   emit(event) {
-		//     console.log('event===', event)
-		//     // if (events.length > 100) {
-		//     //   // stop after 100 events
+  <!-- <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script> -->
 
-		//     // }
-		//   },
-		// });
+  <script src="./type.js"></script>
+  <script>
+    // let stopFn = rrweb.record({
+    //   emit(event) {
+    //     console.log('event===', event)
+    //     // if (events.length > 100) {
+    //     //   // stop after 100 events
 
-		const events = []
+    //     // }
+    //   },
+    // });
 
-		let iframeDom = null
+    const events = []
 
-		// Array.prototype.push = function() {
-		//   this[this.length] = arguments[0];
-		//   console.log(this)
-		// }
-		function getWindowHeight() {
-			return window.innerHeight || document.documentElement && document.documentElement.clientHeight || document.body && document.body.clientHeight;
-		}
-		function getWindowWidth() {
-			return window.innerWidth || document.documentElement && document.documentElement.clientWidth || document.body && document.body.clientWidth;
-		}
+    let iframeDom = null
 
-		function deepCopy(data) {
-			return JSON.parse(JSON.stringify(data))
-		}
+    // Array.prototype.push = function() {
+    //   this[this.length] = arguments[0];
+    //   console.log(this)
+    // }
+    function getWindowHeight() {
+      return window.innerHeight || document.documentElement && document.documentElement.clientHeight || document.body && document.body.clientHeight;
+    }
+    function getWindowWidth() {
+      return window.innerWidth || document.documentElement && document.documentElement.clientWidth || document.body && document.body.clientWidth;
+    }
+
+    function deepCopy(data) {
+      return JSON.parse(JSON.stringify(data))
+    }
 
     function getStyleByDisplay(dom) {
       try {
@@ -72,133 +77,141 @@
 		// oReq.addEventListener("load", reqListener);
 		// oReq.open("GET", "https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web//static/bytedesign.min.css");
 		// oReq.send();
-	</script>
+  </script>
 
-	<script>
-		console.log(document.childNodes[1])
+  <script>
+    console.log(document.childNodes[1])
 
-  //  getComputedStyle(document.getElementById('wtechtec_opt'))
+    //  getComputedStyle(document.getElementById('wtechtec_opt'))
 
-  setTimeout(() => {
-    let test = document.getElementById("wtechtec_opt")
-console.log('setTimeout===')
-console.log(test.style);
-  }, 100)
+    setTimeout(() => {
+      let test = document.getElementById("wtechtec_opt")
+      console.log('setTimeout===')
+      console.log(test.style);
+    }, 100)
 
 
-		function downLoadLink(linkUrl) {
-			iframeDom = iframeDom || document.createElement('iframe')
-			iframeDom.src = linkUrl
-			iframeDom.id = 'test_iframeDom'
+    function downLoadLink(linkUrl) {
+      iframeDom = iframeDom || document.createElement('iframe')
+      iframeDom.src = linkUrl
+      iframeDom.id = 'test_iframeDom'
 
-			const msgScript = document.createComment('script')
-			iframeDom.appendChild(msgScript)
-			iframeDom.onload = (e) => {
-				// console.log('iframe=====',  iframeDom.contentWindow.window.document)
-				var myIframe = document.getElementById("test_iframeDom").contentWindow
-					.document.getElementById("son").innerText;
-				console.log(myIframe)
-			}
-			iframeDom && document.body.appendChild(iframeDom)
-		}
-		// DomTree 转换
-		function parseDom(dom) {
-			function parse(dom) {
-				if (!dom) return ''
-				const node = {
-					tagName: dom.nodeName || '',
-					txtContext: dom.nodeName === '#text' ? dom.textContent || '' : '',
-					attributes: {},
+      const msgScript = document.createComment('script')
+      iframeDom.appendChild(msgScript)
+      iframeDom.onload = (e) => {
+        // console.log('iframe=====',  iframeDom.contentWindow.window.document)
+        var myIframe = document.getElementById("test_iframeDom").contentWindow
+          .document.getElementById("son").innerText;
+        console.log(myIframe)
+      }
+      iframeDom && document.body.appendChild(iframeDom)
+    }
+    // DomTree 转换
+    function parseDom(dom) {
+      function parse(dom) {
+        if (!dom) return ''
+        const node = {
+          tagName: dom.nodeName || '',
+          txtContext: dom.nodeName === '#text' ? dom.textContent || '' : '',
+          attributes: {},
           style: {},
-					childNodes: [],
-				}
-				// 属性style、id、data-*
-				const attributes = dom.attributes
-				if (attributes && typeof attributes === 'object' && Object.keys(attributes)) {
-					Object.keys(attributes).forEach(key => {
-						node.attributes[attributes[key].nodeName] = attributes[key].value
-					})
-				}
-
-				// 针对 display 
-        if (getStyleByDisplay(dom) === 'none' ) {
-          node.style.display = 'none'
+          childNodes: [],
+        }
+        // 属性style、id、data-*
+        const attributes = dom.attributes
+        if (attributes && typeof attributes === 'object' && Object.keys(attributes)) {
+          Object.keys(attributes).forEach(key => {
+            node.attributes[attributes[key].nodeName] = attributes[key].value
+          })
         }
 
-				// 针对 script, 直接失效
-				if (node.tagName === 'SCRIPT') {
-					node.tagName = 'NOSCRIPT'
-				}
+        // 针对 display 
+        // if (getStyleByDisplay(dom) === 'none' ) {
+        //   node.style.display = 'none'
+        // }
 
-				// 针对link, 直接引用链接
-				// if (node.tagName === 'LINK' && node.attributes.rel === 'stylesheet') {
-				// 	console.log('dom.href====', node, dom.href)
-				// 	downLoadLink(dom.href)
-				// }
+        // 针对 script, 直接失效
+        if (node.tagName === 'SCRIPT') {
+          node.tagName = 'NOSCRIPT'
+        }
 
-				// 子节点数组
-				const childNodes = dom.childNodes
-				if (childNodes && childNodes.length) {
-					for (let i = 0; i < childNodes.length; i++) {
-						node.childNodes.push(parse(childNodes[i]))
-					}
-				}
-				return node;
-			}
-			const nodes = parse(dom)
-			return [nodes];
-		}
+        // 针对link, 直接引用链接
+        // if (node.tagName === 'LINK' && node.attributes.rel === 'stylesheet') {
+        // 	console.log('dom.href====', node, dom.href)
+        // 	downLoadLink(dom.href)
+        // }
 
-	</script>
+        // 子节点数组
+        const childNodes = dom.childNodes
+        if (childNodes && childNodes.length) {
+          for (let i = 0; i < childNodes.length; i++) {
+            if (childNodes[i].nodeName !== '#comment' && getStyleByDisplay(dom) !== 'none' ) {
+              node.childNodes.push(parse(childNodes[i]))
+            } else if (getStyleByDisplay(dom) === 'none' && ['STYLE', 'HEAD'].includes(dom.nodeName)) {
+              node.childNodes.push(parse(childNodes[i]))
+            }
+          }
+        }
+        return node;
+      }
+      const nodes = parse(dom)
+      return [nodes];
+    }
 
-	<script>
+  </script>
 
-		document.addEventListener('readystatechange', () => {
-			console.log('document.readyState===', document.readyState)
-			if (document.readyState === 'interactive' || document.readyState === 'complete') {
-				events.push({
-					type: 2,
-					data: {
-						href: window.location.href,
-						width: getWindowWidth(),
-						height: getWindowHeight(),
-					}
-				})
-				const root = parseDom(document.childNodes[1])
-				console.log(root)
-			}
-			console.log('events===', deepCopy(events))
-		});
+  <script>
+
+    document.addEventListener('readystatechange', () => {
+      console.log('document.readyState===', document.readyState)
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        events.push({
+          type: TYPES.META,
+          data: {
+            href: window.location.href,
+            width: getWindowWidth(),
+            height: getWindowHeight(),
+          }
+        })
+        const root = parseDom(document.childNodes[1])
+        console.log(root)
+        events.push({
+          type: TYPES.DOM,
+          node: root,
+        })
+      }
+      console.log('events===', JSON.stringify(deepCopy(events)))
+    });
 
 
-	</script>
+  </script>
 
-	<noscript>
-		const infoDom = document.documentElement
+  <noscript>
+    const infoDom = document.documentElement
 
-		function handAdd() {
-		const divDom = document.createElement('div')
-		divDom.innerHTML = `新增节点${Math.random()}`
-		document.getElementById('mainId').appendChild(divDom)
-		}
+    function handAdd() {
+    const divDom = document.createElement('div')
+    divDom.innerHTML = `新增节点${Math.random()}`
+    document.getElementById('mainId').appendChild(divDom)
+    }
 
-		console.log('infoDom====', infoDom);
+    console.log('infoDom====', infoDom);
 
-		const config = {
-		childList: true,
-		subtree: true,
-		attribute: true,
-		characterData: true,
-		attributeFilter: ['class', 'style']
-		};
+    const config = {
+    childList: true,
+    subtree: true,
+    attribute: true,
+    characterData: true,
+    attributeFilter: ['class', 'style']
+    };
 
-		const mutObserver = new MutationObserver((mutationList, observer) => {
-		console.log(mutationList, observer)
-		});
+    const mutObserver = new MutationObserver((mutationList, observer) => {
+    console.log(mutationList, observer)
+    });
 
-		mutObserver.observe(infoDom, config)
+    mutObserver.observe(infoDom, config)
 
-	</noscript>
+  </noscript>
 
 </body>
 

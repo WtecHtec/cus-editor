@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>player</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+  测试：
+  <iframe id="playerIframe"></iframe>
+
+  <script src="./data.js"></script>
+  <script src="./type.js"></script>
+  <script>
+    const datas = TEST_DATAS
+    function render(iframeDom, data) {
+      function tranformDom(data) {
+        const { attributes, childNodes, style, tagName, txtContext } = data
+
+        const nodeDom = tagName === '#text' ? document.createTextNode(txtContext) : document.createElement(tagName)
+
+        // attr
+        if (attributes && Object.keys(attributes).length) {
+          Object.keys(attributes).forEach(key => {
+            attributes[key] && nodeDom.setAttribute(key, attributes[key])
+          })
+        }
+        if (childNodes && childNodes.length) {
+          childNodes.forEach(child => {
+            nodeDom.appendChild(tranformDom(child))
+          })
+        }
+
+        return nodeDom;
+      }
+      const root = tranformDom(data)
+      console.log(root)
+
+      iframeDom.srcdoc = root.outerHTML
+
+    }
+    function refreshFrame(data) {
+      const ifrme = document.getElementById('playerIframe')
+      let i = 0
+      function renderFrame() {
+        const { type, node } = data[i]
+        if (type === TYPES.DOM && node && node.length) {
+          render(ifrme, node[0])
+        }
+        if (i < data.length) {
+          i++
+          window.requestAnimationFrame(renderFrame)
+        }
+      }
+
+      window.requestAnimationFrame(renderFrame)
+    }
+    function main() {
+      console.log('start', TEST_DATAS)
+      refreshFrame(TEST_DATAS)
+
+    }
+    window.onload = main
+
+  </script>
+</body>
+
+</html>
