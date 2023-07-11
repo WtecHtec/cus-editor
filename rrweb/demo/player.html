@@ -6,16 +6,76 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>player</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <style>
+    .player {
+      position: relative;
+      height: 800px;
+      width: 800px;
+    }
+
+    #plyerCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body>
   测试：
-  <iframe id="playerIframe"></iframe>
+  <div class="player">
+    <canvas id="plyerCanvas"></canvas>
+    <iframe id="playerIframe"></iframe>
+  </div>
+
 
   <script src="./data.js"></script>
   <script src="./type.js"></script>
   <script>
     const datas = TEST_DATAS
+    const width = 800
+    const height = 800
+    let canvas = null
+    let ratio = 1
+  </script>
+  <script>
+
+    function getCanvasCtx() {
+      canvas = document.getElementById('plyerCanvas');
+
+      ratio = window.devicePixelRatio || 1;
+      canvas.width = width * ratio; // 实际渲染像素
+      canvas.height = height * ratio; // 实际渲染像素
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      if (canvas.getContext) {
+        const ctx = canvas.getContext('2d');
+        ctx.scale(ratio, ratio)
+        return ctx
+      }
+      return null
+    }
+
+
+    function renderCanvas(ctx, data) {
+      const { x, y } = data
+      if (x && y) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        ctx.beginPath();
+        ctx.fillStyle = '#34c24e'
+        ctx.arc(x, y, 10, 0, 2 * Math.PI);//x,y是圆心
+        ctx.fill(); //开始填充，空心/实心取决于这个
+      }
+
+    }
+
+  </script>
+  <script>
     function render(iframeDom, data) {
       function tranformDom(data) {
         const { attributes, childNodes, style, tagName, txtContext } = data
@@ -44,16 +104,26 @@
     }
     function refreshFrame(data) {
       const ifrme = document.getElementById('playerIframe')
+      ifrme.style.width = `${width}px`
+      ifrme.style.height = `${height}px`
       let i = 0
       let frame = 0
       let currentTime = new Date().getTime()
       let status = true
+      const ctx = getCanvasCtx()
       function renderFrame() {
         // console.log('renderFrame ===', i, currentTime, frame)
-        const { type, node, time } = data[i]
+        const { type, node, time, position } = data[i]
 
+        // iframe 渲染
         if (type === TYPES.DOM && node && node.length && status) {
           render(ifrme, node[0])
+        }
+
+        // canvas 绘制
+
+        if (type === TYPES.EVENT && ctx && position && Object.keys(position).length === 2) {
+          renderCanvas(ctx, position)
         }
 
         if (i < data.length - 1) {
@@ -64,7 +134,7 @@
           const { time: nextTime } = data[i + 1]
           const diffTime = new Date().getTime() - currentTime
           // console.log('diffTime===', frame,  nextTime, diffTime)
-          if (frame +  diffTime > nextTime) {
+          if (frame + diffTime > nextTime) {
             i++;
             frame = nextTime;
             currentTime = new Date().getTime()
@@ -76,10 +146,11 @@
 
       window.requestAnimationFrame(renderFrame)
     }
+  </script>
+  <script>
     function main() {
       console.log('start', TEST_DATAS)
       refreshFrame(TEST_DATAS)
-
     }
     window.onload = main
 
