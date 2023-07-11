@@ -18,7 +18,11 @@
 <body class="main main2" data-item="main-text">
   <div id="mainId">
     设置
-    <button id="add" onclick="handAdd()"> 添加 </button>
+    <button id="add" onclick="handAdd()"> 添加节点 </button>
+    计数：<span id="acount"> 0 </span>
+    <button onclick="handAcount()"> 计数 </button>
+    <button onclick="handColor()"> 修改颜色 </button>
+
   </div>
 
   <img src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css" />
@@ -28,6 +32,26 @@
   <!-- <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script> -->
 
   <script src="./type.js"></script>
+  <script>
+    function handAdd() {
+      const divDom = document.createElement('div')
+      divDom.innerHTML = `新增节点${Math.random()}`
+      document.getElementById('mainId').appendChild(divDom)
+    }
+
+    let acount = 0
+    const acountDom = document.getElementById('acount')
+    function handAcount() {
+      acount++
+      acountDom.innerHTML = acount
+    }
+
+    function handColor() {
+      const mainDom = document.getElementById('mainId')
+      mainDom.style.color = 'green'
+    }
+
+  </script>
   <script>
     // let stopFn = rrweb.record({
     //   emit(event) {
@@ -84,16 +108,6 @@
 
   <script>
     console.log(document.childNodes[1])
-
-    //  getComputedStyle(document.getElementById('wtechtec_opt'))
-
-    setTimeout(() => {
-      let test = document.getElementById("wtechtec_opt")
-      console.log('setTimeout===')
-      console.log(test.style);
-    }, 100)
-
-
     function downLoadLink(linkUrl) {
       iframeDom = iframeDom || document.createElement('iframe')
       iframeDom.src = linkUrl
@@ -195,16 +209,6 @@
 
   <script>
     const infoDom = document.documentElement
-
-    function handAdd() {
-      // const divDom = document.createElement('div')
-      // divDom.innerHTML = `新增节点${Math.random()}`
-      // document.getElementById('mainId').appendChild(divDom)
-      const mainDom = document.getElementById('mainId')
-      mainDom.style.color = 'green'
-    }
-
-    console.log('infoDom====', infoDom);
 
     const config = {
       childList: true,

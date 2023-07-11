@@ -37,7 +37,7 @@
         return nodeDom;
       }
       const root = tranformDom(data)
-      console.log(root)
+      // console.log(root)
 
       iframeDom.srcdoc = root.outerHTML
 
@@ -45,13 +45,31 @@
     function refreshFrame(data) {
       const ifrme = document.getElementById('playerIframe')
       let i = 0
+      let frame = 0
+      let currentTime = new Date().getTime()
+      let status = true
       function renderFrame() {
-        const { type, node } = data[i]
-        if (type === TYPES.DOM && node && node.length) {
+        // console.log('renderFrame ===', i, currentTime, frame)
+        const { type, node, time } = data[i]
+
+        if (type === TYPES.DOM && node && node.length && status) {
           render(ifrme, node[0])
         }
-        if (i < data.length) {
-          i++
+
+        if (i < data.length - 1) {
+          status = false
+          if (frame === 0) {
+            frame = time
+          }
+          const { time: nextTime } = data[i + 1]
+          const diffTime = new Date().getTime() - currentTime
+          // console.log('diffTime===', frame,  nextTime, diffTime)
+          if (frame +  diffTime > nextTime) {
+            i++;
+            frame = nextTime;
+            currentTime = new Date().getTime()
+            status = true
+          }
           window.requestAnimationFrame(renderFrame)
         }
       }
