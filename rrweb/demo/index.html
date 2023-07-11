@@ -12,9 +12,6 @@
     .main {
       color: #000;
     }
-    #mainId {
-      color: red;
-    }
   </style>
 </head>
 
@@ -46,6 +43,8 @@
 
     let iframeDom = null
 
+    let status = 'loading'
+
     // Array.prototype.push = function() {
     //   this[this.length] = arguments[0];
     //   console.log(this)
@@ -67,6 +66,10 @@
       } catch (e) {
         return ''
       }
+    }
+
+    function printEvents() {
+      console.log('events===', JSON.stringify(deepCopy(events)))
     }
 
 		// function reqListener() {
@@ -106,6 +109,7 @@
       }
       iframeDom && document.body.appendChild(iframeDom)
     }
+
     // DomTree 转换
     function parseDom(dom) {
       function parse(dom) {
@@ -145,7 +149,7 @@
         const childNodes = dom.childNodes
         if (childNodes && childNodes.length) {
           for (let i = 0; i < childNodes.length; i++) {
-            if (childNodes[i].nodeName !== '#comment' && getStyleByDisplay(dom) !== 'none' ) {
+            if (childNodes[i].nodeName !== '#comment' && getStyleByDisplay(dom) !== 'none') {
               node.childNodes.push(parse(childNodes[i]))
             } else if (getStyleByDisplay(dom) === 'none' && ['STYLE', 'HEAD'].includes(dom.nodeName)) {
               node.childNodes.push(parse(childNodes[i]))
@@ -165,53 +169,67 @@
     document.addEventListener('readystatechange', () => {
       console.log('document.readyState===', document.readyState)
       if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        status = document.readyState
         events.push({
           type: TYPES.META,
           data: {
             href: window.location.href,
             width: getWindowWidth(),
             height: getWindowHeight(),
-          }
+          },
+          time: new Date().getTime(),
         })
         const root = parseDom(document.childNodes[1])
-        console.log(root)
+        // console.log(root)
         events.push({
           type: TYPES.DOM,
           node: root,
+          time: new Date().getTime(),
         })
       }
-      console.log('events===', JSON.stringify(deepCopy(events)))
+      printEvents()
     });
 
 
   </script>
 
-  <noscript>
+  <script>
     const infoDom = document.documentElement
 
     function handAdd() {
-    const divDom = document.createElement('div')
-    divDom.innerHTML = `新增节点${Math.random()}`
-    document.getElementById('mainId').appendChild(divDom)
+      // const divDom = document.createElement('div')
+      // divDom.innerHTML = `新增节点${Math.random()}`
+      // document.getElementById('mainId').appendChild(divDom)
+      const mainDom = document.getElementById('mainId')
+      mainDom.style.color = 'green'
     }
 
     console.log('infoDom====', infoDom);
 
     const config = {
-    childList: true,
-    subtree: true,
-    attribute: true,
-    characterData: true,
-    attributeFilter: ['class', 'style']
+      childList: true,
+      subtree: true,
+      attribute: true,
+      characterData: true,
+      attributeFilter: ['class', 'style']
     };
 
     const mutObserver = new MutationObserver((mutationList, observer) => {
-    console.log(mutationList, observer)
+      if (status === 'complete') {
+        console.log(mutationList, observer)
+        const root = parseDom(document.childNodes[1])
+        events.push({
+          type: TYPES.DOM,
+          node: root,
+          time: new Date().getTime(),
+        })
+        printEvents()
+      }
     });
 
     mutObserver.observe(infoDom, config)
 
-  </noscript>
+  </script>
 
 </body>
 
