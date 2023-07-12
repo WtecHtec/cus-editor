@@ -49,3 +49,9 @@ addEventListener 监听按钮点击、滚动、鼠标滑动等事件
 addEventListener
 ```
 
+### hover 事件
+
+监听 鼠标移动事件，
+1、 js触发 hover 事件
+2、hover 样式新增类名，缺点：外链css，存在问题
+

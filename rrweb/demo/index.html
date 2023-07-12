@@ -12,6 +12,10 @@
     .main {
       color: #000;
     }
+
+    .hover-text:hover {
+      color: yellow;
+    }
   </style>
 </head>
 
@@ -23,13 +27,19 @@
     <button onclick="handAcount()"> 计数 </button>
     <button onclick="handColor()"> 修改颜色 </button>
 
+    <div class="hover-text" id="hoverText"> HOVER </div>
+    <div>
+      输入框
+    </div>
+  
+
   </div>
 
   <img src="https://img-blog.csdnimg.cn/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" />
 
   <!-- <iframe src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"></iframe> -->
 
-  <!-- <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script> -->
+  <script src='https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.js'></script>
 
   <script src="./type.js"></script>
   <script>
@@ -126,14 +136,17 @@
 
     // DomTree 转换
     function parseDom(dom) {
+      let id = 0
       function parse(dom) {
         if (!dom) return ''
         const node = {
+          id,
           tagName: dom.nodeName || '',
           txtContext: dom.nodeName === '#text' ? dom.textContent || '' : '',
           attributes: {},
           style: {},
           childNodes: [],
+
         }
         // 属性style、id、data-*
         const attributes = dom.attributes
@@ -163,6 +176,7 @@
         const childNodes = dom.childNodes
         if (childNodes && childNodes.length) {
           for (let i = 0; i < childNodes.length; i++) {
+            id++;
             if (childNodes[i].nodeName !== '#comment' && getStyleByDisplay(dom) !== 'none') {
               node.childNodes.push(parse(childNodes[i]))
             } else if (getStyleByDisplay(dom) === 'none' && ['STYLE', 'HEAD'].includes(dom.nodeName)) {
@@ -240,7 +254,10 @@
 
     window.addEventListener('mousemove', (e) => {
       const { x, y } = e
-      console.log('mousemove====',  x, y)
+      
+      // 1. 记录 id，
+      // 2. 把hover 样式单独放到一个style里面
+      // 外链css 会舍弃hover
       events.push({
         type: TYPES.EVENT,
         position: {
@@ -249,6 +266,15 @@
         },
         time: new Date().getTime()
       })
+      
+      const hoverDoms = document.querySelectorAll(':hover')
+      // console.log('hoverDoms====', hoverDoms)
+      if (hoverDoms && hoverDoms.length && hoverDoms[hoverDoms.length - 1].nodeName !== 'HTML') {
+        console.log(hoverDoms)
+        console.log('mousemove====', e.target)
+        const comStyles =  getComputedStyle(e.target, ":hover")
+        console.log('comStyles====', JSON.stringify(comStyles) )
+      }
     })
 
   </script>
