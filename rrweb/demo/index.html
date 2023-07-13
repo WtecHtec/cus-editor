@@ -30,7 +30,13 @@
     <div class="hover-text hover" id="hoverText"> HOVER </div>
     <div>
       输入框
+      <input id="testInput" />
+      <textarea  id="testTextarea"></textarea>
+      <input type="file" />
+      <input type="button" value="button">
     </div>
+
+  </div>
 
 
   </div>
@@ -197,6 +203,11 @@
         // 	downLoadLink(dom.href)
         // }
 
+        // 针对 input 输入
+        if (['TEXTAREA', 'INPUT'].includes(node.tagName)) {
+          node.txtContext = dom.value || ''
+        }
+
         // 子节点数组
         const childNodes = dom.childNodes
         if (childNodes && childNodes.length) {
@@ -316,6 +327,20 @@
       }
     })
 
+  </script>
+
+
+  <script>
+    // 输入框
+    document.addEventListener('input', (event) => {
+      console.log(event)
+      const root = parseDom(document.childNodes[1])
+      events.push({
+        type: TYPES.DOM,
+        node: root,
+        time: new Date().getTime(),
+      })
+    })
   </script>
 </body>
 

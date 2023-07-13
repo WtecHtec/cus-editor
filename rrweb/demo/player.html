@@ -67,7 +67,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         ctx.beginPath();
-        ctx.globalAlpha  = 0.5
+        ctx.globalAlpha = 0.5
         ctx.fillStyle = '#34c24e'
         ctx.arc(x, y, 10, 0, 2 * Math.PI);//x,y是圆心
         ctx.fill(); //开始填充，空心/实心取决于这个
@@ -89,6 +89,25 @@
             attributes[key] && nodeDom.setAttribute(key, attributes[key])
           })
         }
+
+        // 针对 input 输入
+        if (['INPUT'].includes(tagName)) {
+          // console.log('txtContext====', txtContext)
+          // nodeDom.value = txtContext || ''
+          nodeDom.setAttribute('value', txtContext || '')
+        }
+
+        // 针对 TEXTAREA
+        if (['TEXTAREA'].includes(tagName)) {
+          console.log('txtContext==== TEXTAREA', txtContext)
+          // nodeDom.value = txtContext || ''
+          nodeDom.innerText  = txtContext || ''
+          // nodeDom.inner ('value', txtContext || '')
+        }
+
+
+
+
         if (childNodes && childNodes.length) {
           childNodes.forEach(child => {
             nodeDom.appendChild(tranformDom(child))
