@@ -67,6 +67,7 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         ctx.beginPath();
+        ctx.globalAlpha  = 0.5
         ctx.fillStyle = '#34c24e'
         ctx.arc(x, y, 10, 0, 2 * Math.PI);//x,y是圆心
         ctx.fill(); //开始填充，空心/实心取决于这个
