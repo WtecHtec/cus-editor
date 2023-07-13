@@ -22,6 +22,9 @@
       z-index: 0;
       pointer-events: none;
     }
+    iframe {
+      border: none;
+    }
   </style>
 </head>
 
@@ -90,6 +93,10 @@
           })
         }
 
+        // 针对html
+        if (['HTML'].includes(tagName)) {
+          nodeDom.setAttribute('style', `${ attributes[style] || '' }pointer-events: none;`)
+        }
         // 针对 input 输入
         if (['INPUT'].includes(tagName)) {
           // console.log('txtContext====', txtContext)
@@ -117,9 +124,12 @@
         return nodeDom;
       }
       const root = tranformDom(data)
-      // console.log(root)
+      console.log(root)
 
-      iframeDom.srcdoc = root.outerHTML
+      // iframeDom.srcdoc = root.outerHTML
+    //  console.log('iframeDom.contentDocument====', iframeDom.contentDocument.getElementsByTagName('html')[0]) 
+     // diff 算法+++
+     iframeDom.contentDocument.replaceChild(root, iframeDom.contentDocument.getElementsByTagName('html')[0]) 
 
     }
     function refreshFrame(data) {
