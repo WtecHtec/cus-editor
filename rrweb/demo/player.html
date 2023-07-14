@@ -22,6 +22,7 @@
       z-index: 0;
       pointer-events: none;
     }
+
     iframe {
       border: none;
     }
@@ -30,7 +31,7 @@
 
 <body>
   测试：
-  <div class="player">
+  <div id="player" class="player" data-playerkey="ddd">
     <canvas id="plyerCanvas"></canvas>
     <iframe id="playerIframe"></iframe>
   </div>
@@ -46,7 +47,7 @@
     let ratio = 1
   </script>
   <script>
-
+    // console.log(document.getElementById('player').attributes['data-playerkey'].value)
     function getCanvasCtx() {
       canvas = document.getElementById('plyerCanvas');
 
@@ -83,36 +84,43 @@
     function render(iframeDom, data) {
       function tranformDom(data) {
         const { attributes, childNodes, style, tagName, txtContext } = data
-
+        let playerkey = tagName
         const nodeDom = tagName === '#text' ? document.createTextNode(txtContext) : document.createElement(tagName)
 
         // attr
         if (attributes && Object.keys(attributes).length) {
           Object.keys(attributes).forEach(key => {
             attributes[key] && nodeDom.setAttribute(key, attributes[key])
+            playerkey += `${key}-${attributes[key]}`
           })
         }
 
         // 针对html
         if (['HTML'].includes(tagName)) {
-          nodeDom.setAttribute('style', `${ attributes[style] || '' }pointer-events: none;`)
+          nodeDom.setAttribute('style', `${attributes[style] || ''}pointer-events: none;`)
+          playerkey += `style-${attributes[style] || ''}pointer-events: none;`
         }
+
         // 针对 input 输入
         if (['INPUT'].includes(tagName)) {
           // console.log('txtContext====', txtContext)
           // nodeDom.value = txtContext || ''
           nodeDom.setAttribute('value', txtContext || '')
+          playerkey += `value-${txtContext || ''}`
         }
 
         // 针对 TEXTAREA
         if (['TEXTAREA'].includes(tagName)) {
           console.log('txtContext==== TEXTAREA', txtContext)
           // nodeDom.value = txtContext || ''
-          nodeDom.innerText  = txtContext || ''
+          nodeDom.innerText = txtContext || ''
+          playerkey += `innerText-${txtContext || ''}`
           // nodeDom.inner ('value', txtContext || '')
         }
 
 
+        // data-playerkey 唯一标识
+        tagName !== '#text' && nodeDom.setAttribute('data-playerkey', playerkey || '')
 
 
         if (childNodes && childNodes.length) {
@@ -127,9 +135,65 @@
       console.log(root)
 
       // iframeDom.srcdoc = root.outerHTML
-    //  console.log('iframeDom.contentDocument====', iframeDom.contentDocument.getElementsByTagName('html')[0]) 
-     // diff 算法+++
-     iframeDom.contentDocument.replaceChild(root, iframeDom.contentDocument.getElementsByTagName('html')[0]) 
+      //  console.log('iframeDom.contentDocument====', iframeDom.contentDocument.getElementsByTagName('html')[0]) 
+      // diff 算法+++
+      //  iframeDom.contentDocument.replaceChild(root, iframeDom.contentDocument.getElementsByTagName('html')[0]) 
+
+      function getAttrValue(attributes, key) {
+        try {
+          return attributes[key].value
+        } catch (error) {
+          return ''
+        }
+      }
+
+      function update(oldDom, newDom, type, parentNode) {
+        const { attributes: oldAttributes, childNodes: oldChildNodes = [], nodeName: oldName, txtContext: oldText } = oldDom || {}
+        const { attributes: newAttributes, childNodes: newChildNodes = [], nodeName: newName, txtContext: newText } = newDom || {}
+
+        if (oldDom && newDom && getAttrValue(oldAttributes, 'data-playerkey') !== getAttrValue(newAttributes, 'data-playerkey')) {
+          oldDom.parentNode.replaceChild(newDom, oldDom)
+          return
+        }
+        // 针对 #text
+        if (oldDom && newDom && oldName === '#text' && newName === oldName && oldText != newText) {
+          oldDom.replaceChild(newDom, oldDom)
+        }
+
+        if (type === 'old') {
+          if (!newDom && oldDom) {
+            oldDom.remove()
+          }
+        }
+
+        if (type === 'new') {
+          if (!oldDom && newDom && parentNode) {
+            parentNode.appendChild(newDom)
+          }
+        }
+
+
+        if (oldChildNodes && newChildNodes) {
+          let maxType = 'old'
+          let len = 0
+          if (oldChildNodes.length > newChildNodes.length) {
+            len = oldChildNodes.length
+          } else {
+            maxType = 'new'
+            len = newChildNodes.length
+          }
+          for (let i = 0; i < len; i++) {
+            update(oldChildNodes[i], newChildNodes[i], maxType, oldDom)
+          }
+
+        }
+
+      }
+
+      // function handUpdate() {
+
+      // }
+      update(iframeDom.contentDocument.getElementsByTagName('html')[0], root)
 
     }
     function refreshFrame(data) {
