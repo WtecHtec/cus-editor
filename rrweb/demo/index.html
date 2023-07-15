@@ -27,7 +27,7 @@
     <button onclick="handAcount()"> 计数 </button>
     <button onclick="handColor()"> 修改颜色 </button>
 
-    <div class="hover-text hover" id="hoverText"> HOVER </div>
+    <div class="hover-text" id="hoverText"> HOVER </div>
     <div>
       输入框
       <input id="testInput" />
@@ -110,6 +110,7 @@
 
     function printEvents() {
       console.log('events===', JSON.stringify(deepCopy(events)))
+      console.log(events)
     }
 
 		// function reqListener() {
@@ -143,7 +144,7 @@
     // DomTree 转换
     function parseDom(dom, position) {
       let id = 0
-      const hoverClass = `hover_${parseInt(Math.random() * 10)}`
+      const hoverClass = `hover_`
       function parse(dom, position) {
         if (!dom) return ''
         const node = {

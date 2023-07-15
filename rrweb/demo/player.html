@@ -120,10 +120,11 @@
 
 
         // data-playerkey 唯一标识
-        tagName !== '#text' && nodeDom.setAttribute('data-playerkey', playerkey || '')
+        // tagName !== '#text' && nodeDom.setAttribute('data-playerkey', playerkey || '')
 
 
         if (childNodes && childNodes.length) {
+          // console.log('childNodes====', childNodes.length)
           childNodes.forEach(child => {
             nodeDom.appendChild(tranformDom(child))
           })
@@ -132,7 +133,7 @@
         return nodeDom;
       }
       const root = tranformDom(data)
-      console.log(root)
+      console.log('render====', root)
 
       // iframeDom.srcdoc = root.outerHTML
       //  console.log('iframeDom.contentDocument====', iframeDom.contentDocument.getElementsByTagName('html')[0]) 
@@ -148,59 +149,91 @@
       }
 
       function update(oldDom, newDom, type, parentNode) {
-        const { attributes: oldAttributes, childNodes: oldChildNodes = [], nodeName: oldName, txtContext: oldText } = oldDom || {}
-        const { attributes: newAttributes, childNodes: newChildNodes = [], nodeName: newName, txtContext: newText } = newDom || {}
+        const { attributes: oldAttributes = {}, childNodes: oldChildNodes = [], nodeName: oldName, txtContext: oldText } = oldDom || {}
+        const { attributes: newAttributes = {}, childNodes: newChildNodes = [], nodeName: newName, txtContext: newText } = newDom || {}
+       
+        if (oldDom && newDom) {
+          // oldDom.parentNode.replaceChild(newDom, oldDom)
+          // tag 不同
+          if (oldName !== newName) {
+            console.log('oldName newName ====', oldDom, newDom, type, parentNode)
+            parentNode.replaceChild(newDom, oldDom)
+            // return
+          }
 
-        if (oldDom && newDom && getAttrValue(oldAttributes, 'data-playerkey') !== getAttrValue(newAttributes, 'data-playerkey')) {
-          oldDom.parentNode.replaceChild(newDom, oldDom)
-          return
+          if (oldName === 'HEAD' && newName === oldName) {
+            console.log('HEAD====', oldAttributes, newAttributes)
+          }
+
+          const oldKeys = Object.keys(oldAttributes)
+          const newKeys = Object.keys(newAttributes)
+          const hasKey = {}
+          newKeys.forEach(key => {
+            const { nodeName } = newAttributes[key]
+            if (!oldAttributes[nodeName] || (oldAttributes[nodeName] && oldAttributes[nodeName].textContent !== newAttributes[nodeName].textContent)) {
+              // console.log('attr=========', nodeName, newAttributes[nodeName].textContent)
+              oldDom.setAttribute(nodeName, newAttributes[nodeName].textContent)
+            }
+            if (oldAttributes[nodeName]) {
+              hasKey[nodeName] = 1
+            }
+          })
+
+          // oldKeys.forEach(key => {
+          //   const { nodeName } = oldAttributes[key]
+          //   if (!hasKey[nodeName]) {
+          //     oldDom.setAttribute(nodeName, '')
+          //   }
+          // })
+
         }
+
         // 针对 #text
         if (oldDom && newDom && oldName === '#text' && newName === oldName && oldText != newText) {
-          oldDom.replaceChild(newDom, oldDom)
+          console.log('#text====', oldText, newText)
+          oldDom.parentNode.replaceChild(newDom, oldDom)
         }
 
         if (type === 'old') {
           if (!newDom && oldDom) {
+            console.log('del', oldDom)
             oldDom.remove()
           }
         }
 
         if (type === 'new') {
           if (!oldDom && newDom && parentNode) {
+            console.log('new', newDom)
             parentNode.appendChild(newDom)
           }
         }
 
-
-        if (oldChildNodes && newChildNodes) {
-          let maxType = 'old'
-          let len = 0
-          if (oldChildNodes.length > newChildNodes.length) {
-            len = oldChildNodes.length
-          } else {
-            maxType = 'new'
-            len = newChildNodes.length
-          }
-          for (let i = 0; i < len; i++) {
-            update(oldChildNodes[i], newChildNodes[i], maxType, oldDom)
-          }
-
+        console.log('newChildNod===', oldChildNodes, newChildNodes )
+        let maxType = 'old'
+        let len = 0
+        if (oldChildNodes.length > newChildNodes.length) {
+          len = oldChildNodes.length
+        } else {
+          maxType = 'new'
+          len = newChildNodes.length
+        }
+        for (let i = 0; i < len; i++) {
+          update(oldChildNodes[i], newChildNodes[i], maxType, oldDom)
         }
 
       }
 
-      // function handUpdate() {
 
-      // }
-      update(iframeDom.contentDocument.getElementsByTagName('html')[0], root)
+      // console.log(iframeDom.contentDocument.getElementsByTagName('html')[0])
+      update(iframeDom.contentDocument.getElementsByTagName('html')[0],  root)
+      
 
     }
     function refreshFrame(data) {
       const ifrme = document.getElementById('playerIframe')
       ifrme.style.width = `${width}px`
       ifrme.style.height = `${height}px`
-      let i = 0
+      let i = 1
       let frame = 0
       let currentTime = new Date().getTime()
       let status = true
@@ -234,7 +267,7 @@
             currentTime = new Date().getTime()
             status = true
           }
-          window.requestAnimationFrame(renderFrame)
+          // window.requestAnimationFrame(renderFrame)
         }
       }
 

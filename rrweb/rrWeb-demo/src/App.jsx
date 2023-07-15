@@ -4,7 +4,7 @@ import './App.css'
 import { eventDatas } from './data'
 import Replayer from 'rrweb-player';
 import 'rrweb-player/dist/style.css';
-
+import viteLogo from '/vite.svg'
 function App() {
   const [count, setCount] = useState(0)
   let events = [];
@@ -37,6 +37,7 @@ function App() {
   }
   return (
     <>
+     <img src="https://img-blog.csdnimg.cn/20201014180756926.png?x-oss-process=image/resize,m_fixed,h_64,w_64" className="logo" alt="Vite logo" />
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
