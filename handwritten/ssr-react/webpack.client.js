@@ -1,6 +1,6 @@
 const path = require('path');
 const baseConfig = require('./webpack.base')
-const {merge} = require('webpack-merge')
+const { merge } = require('webpack-merge')
 
 const config = {
   // 入口文件
@@ -12,6 +12,18 @@ const config = {
     // 打包文件名
     filename: 'bundle.js',
   },
+  module: {
+    rules: [
+      {
+        test: /\.css?$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader'
+        ]
+      }
+    ]
+  }
 }
 
 module.exports = merge(baseConfig, config)

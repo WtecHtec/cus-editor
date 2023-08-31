@@ -1,6 +1,6 @@
 const path = require('path')
 const baseConfig = require('./webpack.base')
-const {merge} = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const nodeExternals = require('webpack-node-externals')
 
 const config = {
@@ -16,6 +16,17 @@ const config = {
     filename: 'bundle.js',
   },
   externals: [nodeExternals()],
+  module: {
+    rules: [
+      {
+        test: /\.css?$/,
+        use: [
+          'isomorphic-style-loader', 
+          'css-loader',
+          'postcss-loader',]
+      }
+    ]
+  }
 }
 
 module.exports = merge(baseConfig, config)
