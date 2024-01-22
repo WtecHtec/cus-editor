@@ -254,3 +254,52 @@ _createPage();
 
 
 _canvasEvent();
+
+
+
+
+
+// document.querySelector("#juejin > div.view-container.container.index-container > main > div > div.timeline-container > div > div > div > div > div > li:nth-child(1) > div > div > div > div.title-row > a")
+
+//*[@id="juejin"]/div[1]/main/div/div[2]/div/div/div/div/div/li[1]/div/div/div/div[1]/a
+// id("juejin")/DIV[1]/MAIN[1]/DIV[1]/DIV[2]/DIV[1]/DIV[1]/DIV[1]/DIV[1]/DIV[1]/LI[1]/DIV[1]/DIV[1]/DIV[1]/DIV[1]/A[1]
+
+
+
+// function th(fn, time, dep) {
+//   const {current } = useRef({ fn, timer: null})
+//   useEffect(() => {
+//     current.fn = fn
+//   }, fn)
+//   return useCallBack(function f(...arg) {
+//     if (current.timer) {
+//       clearTimeout(current.timer)
+//       return
+//     }
+//     current.timer = setTimeout(() => {
+//       current.fn(...arg)
+//     }, time)
+
+//   }, dep)
+// }
+
+
+
+
+let i = 0
+
+document.addEventListener('keydown', () => {
+  console.log('keydown===', i)
+})
+
+function tick() {
+  console.log(i)
+  i++
+  if (i < 200) {
+    requestAnimationFrame(tick)
+  }
+
+
+}
+
+tick()
